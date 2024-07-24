@@ -24,28 +24,29 @@ jobs:
         run: |
           git remote add upstream https://github.com/KelvinTegelaar/CIPP-API.git
           git fetch upstream
-          git checkout master
+          git checkout main
 
       - name: Merge changes from upstream
         run: |
-          git merge upstream/master || true
+          git merge upstream/main || true
 
       - name: Check if there are changes to push
         id: changes
         run: |
           if [ -z "$(git status --porcelain)" ]; then
-            echo "changes=false" >> $GITHUB_ENV
+            echo "No changes to commit"
+            echo "::set-output name=changes::false"
           else
-            echo "changes=true" >> $GITHUB_ENV
+            echo "Changes detected"
+            echo "::set-output name=changes::true"
           fi
 
       - name: Push changes
-        if: env.changes == 'true'
+        if: steps.changes.outputs.changes == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         run: |
-          git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/your-username/your-fork.git
-          git push origin master
+          git push origin main
 
       - name: Display Git config
         run: |
