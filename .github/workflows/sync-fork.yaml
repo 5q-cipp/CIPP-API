@@ -24,11 +24,11 @@ jobs:
         run: |
           git remote add upstream https://github.com/KelvinTegelaar/CIPP-API.git
           git fetch upstream
-          git checkout main
+          git checkout master
 
       - name: Merge changes from upstream
         run: |
-          git merge upstream/main || true
+          git merge upstream/master || true
 
       - name: Check if there are changes to push
         id: changes
@@ -46,7 +46,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         run: |
-          git push origin main
+          git push origin master
 
       - name: Display Git config
         run: |
